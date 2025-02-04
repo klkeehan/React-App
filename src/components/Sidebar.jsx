@@ -4,27 +4,23 @@ import { useState, useCallback } from "react"
  * unordered list.
  * @returns Component
  */
-export default function Sidebar() {
+export default function Sidebar({initialMenuItems}) {
   let [newMenuItem, setNewMenuItem] = useState("")
-  // TODO: 2 Using a state hook, maintain the current menu items as an array state.
-  // let [menuItems, setMenuItems] = useState(initialMenuItems)
+  // TODO 2: maintaining current menu items as array state using initial menu items as a base
+  let [menuItems, setMenuItems] = useState(initialMenuItems)
   let [filter, setFilter] = useState("")
-  // Adds a single string passed in as parameter to the state element
-  // "menuItems" that holds the set of current menu items.
-  let addMenuItem = useCallback(() => {
-    console.log("Added menu item")
-    //   // TODO: 3. Add a new menu item to the correct variable associated with this class.
-    //   // This involves adding a parameter and changing a class instance variable (props).
-    //   setMenuItems([item, ...menuItems])
-  }, [])
+  // TODO 3: adding new menu item to existing item array
+  let addMenuItem = useCallback(() => { setMenuItems([newMenuItem, ...menuItems]); }, [newMenuItem])
+  // filtering for a match to the inputted filter regardless of case
+  let filteredMenuItems = menuItems.filter((items) => items.toLowerCase().includes(filter.toLowerCase()))
 
-  // TODO: 4. Display ONLY the menu items that contain the filter element value
-  // "term" in them. Each menu item should be an unordered list item wrapped in an unordered list (ul) element.
-
-  // TODO: 1 Render inside the outer div an unordered list of the menu items, with each string in the array
-  // its own item.
+  // TODO 1 & 4: rendering list of items in ul element
   return (
     <div>
+      <ul>
+        {filteredMenuItems.map((item, index) => <li key={index}>{item}</li>)}
+      </ul>
+      
       <input
         type="text"
         id="newMenuItemValue"
@@ -32,13 +28,7 @@ export default function Sidebar() {
         onChange={(event) => setNewMenuItem(event.target.value)}
       ></input>
       <br />
-      <button
-        onClick={() => {
-          /* TODO: 3 */
-        }}
-      >
-        Add Item
-      </button>
+      <button onClick={addMenuItem /*using function to add new menu item on button click*/}>Add Item</button>
       <br />
       <input
         id="filter"
